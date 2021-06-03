@@ -1,4 +1,15 @@
-import { LitElement, html, customElement, property, CSSResult, TemplateResult, css, PropertyValues } from 'lit-element';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  LitElement,
+  html,
+  customElement,
+  property,
+  CSSResult,
+  TemplateResult,
+  css,
+  PropertyValues,
+  internalProperty,
+} from 'lit-element';
 import {
   HomeAssistant,
   hasConfigOrEntityChanged,
@@ -7,14 +18,13 @@ import {
   handleAction,
   LovelaceCardEditor,
   getLovelace,
-} from 'custom-card-helpers';
+} from 'custom-card-helpers'; // This is a community maintained npm module with common helper functions/types
 
 import './editor';
 
-import { BoilerplateCardConfig } from './types';
+import type { BoilerplateCardConfig } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
-
 import { localize } from './localize/localize';
 
 /* eslint no-console: 0 */
@@ -24,6 +34,7 @@ console.info(
   'color: white; font-weight: bold; background: dimgray',
 );
 
+// This puts your card into the UI card picker dialog
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
   type: 'boilerplate-card',
@@ -43,12 +54,14 @@ export class BoilerplateCard extends LitElement {
   }
 
   // TODO Add any properities that should cause your element to re-render here
-  @property() public hass!: HomeAssistant;
-  @property() private config!: BoilerplateCardConfig;
+  // https://lit-element.polymer-project.org/guide/properties
+  @property({ attribute: false }) public hass!: HomeAssistant;
+  @internalProperty() private config!: BoilerplateCardConfig;
 
+  // https://lit-element.polymer-project.org/guide/properties#accessors-custom
   public setConfig(config: BoilerplateCardConfig): void {
     // TODO Check for required fields and that they are of the proper format
-    if (!config || config.show_error) {
+    if (!config) {
       throw new Error(localize('common.invalid_configuration'));
     }
 
@@ -62,6 +75,7 @@ export class BoilerplateCard extends LitElement {
     };
   }
 
+  // https://lit-element.polymer-project.org/guide/lifecycle#shouldupdate
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!this.config) {
       return false;
@@ -70,10 +84,15 @@ export class BoilerplateCard extends LitElement {
     return hasConfigOrEntityChanged(this, changedProps, false);
   }
 
+  // https://lit-element.polymer-project.org/guide/templates
   protected render(): TemplateResult | void {
     // TODO Check for stateObj or other necessary things and render a warning if missing
     if (this.config.show_warning) {
-      return this.showWarning(localize('common.show_warning'));
+      return this._showWarning(localize('common.show_warning'));
+    }
+
+    if (this.config.show_error) {
+      return this._showError(localize('common.show_error'));
     }
 
     return html`
@@ -96,13 +115,13 @@ export class BoilerplateCard extends LitElement {
     }
   }
 
-  private showWarning(warning: string): TemplateResult {
+  private _showWarning(warning: string): TemplateResult {
     return html`
       <hui-warning>${warning}</hui-warning>
     `;
   }
 
-  private showError(error: string): TemplateResult {
+  private _showError(error: string): TemplateResult {
     const errorCard = document.createElement('hui-error-card');
     errorCard.setConfig({
       type: 'error',
@@ -115,6 +134,7 @@ export class BoilerplateCard extends LitElement {
     `;
   }
 
+  // https://lit-element.polymer-project.org/guide/styles
   static get styles(): CSSResult {
     return css``;
   }
