@@ -40,14 +40,14 @@ Hey dude! Help me out for a couple of :beers: or a :coffee:!
 | url             | string | **Optional** | URL to open on click when action is url. The URL will open in a new tab                                                                | `none`      |
 | service         | string | **Optional** | Service to call (e.g. media_player.media_play_pause) when action defined as call-service                                               | `none`      |
 | service_data    | object | **Optional** | Service data to include (e.g. entity_id: media_player.bedroom) when action defined as call-service                                     | `none`      |
-| haptic          | string | **Optional** | Haptic feedback for the [Beta IOS App](http://home-assistant.io/ios/beta) _success, warning, failure, light, medium, heavy, selection_ | `none`      |
-| repeat          | number | **Optional** | How often to repeat the `hold_action` in milliseconds.                                                                                 | `non`       |
+| haptic          | string | **Optional** | Haptic feedback _success, warning, failure, light, medium, heavy, selection_ | `none`      |
+| repeat          | number | **Optional** | How often to repeat the `hold_action` in milliseconds.                                                                                 | `none`       |
 
 ## Starting a new card from boilerplate-card
 
 ### Step 1
 
-Clone this repository
+Click the "Use this template" button on the main page and clone the new repository to your machine
 
 ### Step 2
 
@@ -114,6 +114,6 @@ info Visit https://yarnpkg.com/en/docs/cli/install for documentation about this 
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/c/projects/frontend
 [license-shield]: https://img.shields.io/github/license/custom-cards/boilerplate-card.svg?style=for-the-badge
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2020.svg?style=for-the-badge
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2021.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/release/custom-cards/boilerplate-card.svg?style=for-the-badge
 [releases]: https://github.com/custom-cards/boilerplate-card/releases

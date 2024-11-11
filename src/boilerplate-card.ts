@@ -1,15 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  LitElement,
-  html,
-  customElement,
-  property,
-  CSSResult,
-  TemplateResult,
-  css,
-  PropertyValues,
-  internalProperty,
-} from 'lit-element';
+import { LitElement, html, TemplateResult, css, PropertyValues, CSSResultGroup } from 'lit';
+import { customElement, property, state } from 'lit/decorators';
 import {
   HomeAssistant,
   hasConfigOrEntityChanged,
@@ -18,9 +9,7 @@ import {
   handleAction,
   LovelaceCardEditor,
   getLovelace,
-} from 'custom-card-helpers'; // This is a community maintained npm module with common helper functions/types
-
-import './editor';
+} from 'custom-card-helpers'; // This is a community maintained npm module with common helper functions/types. https://github.com/custom-cards/custom-card-helpers
 
 import type { BoilerplateCardConfig } from './types';
 import { actionHandler } from './action-handler-directive';
@@ -46,19 +35,21 @@ console.info(
 @customElement('boilerplate-card')
 export class BoilerplateCard extends LitElement {
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
+    await import('./editor');
     return document.createElement('boilerplate-card-editor');
   }
 
-  public static getStubConfig(): object {
+  public static getStubConfig(): Record<string, unknown> {
     return {};
   }
 
   // TODO Add any properities that should cause your element to re-render here
-  // https://lit-element.polymer-project.org/guide/properties
+  // https://lit.dev/docs/components/properties/
   @property({ attribute: false }) public hass!: HomeAssistant;
-  @internalProperty() private config!: BoilerplateCardConfig;
 
-  // https://lit-element.polymer-project.org/guide/properties#accessors-custom
+  @state() private config!: BoilerplateCardConfig;
+
+  // https://lit.dev/docs/components/properties/#accessors-custom
   public setConfig(config: BoilerplateCardConfig): void {
     // TODO Check for required fields and that they are of the proper format
     if (!config) {
@@ -75,7 +66,7 @@ export class BoilerplateCard extends LitElement {
     };
   }
 
-  // https://lit-element.polymer-project.org/guide/lifecycle#shouldupdate
+  // https://lit.dev/docs/components/lifecycle/#reactive-update-cycle-performing
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!this.config) {
       return false;
@@ -84,7 +75,7 @@ export class BoilerplateCard extends LitElement {
     return hasConfigOrEntityChanged(this, changedProps, false);
   }
 
-  // https://lit-element.polymer-project.org/guide/templates
+  // https://lit.dev/docs/components/rendering/
   protected render(): TemplateResult | void {
     // TODO Check for stateObj or other necessary things and render a warning if missing
     if (this.config.show_warning) {
@@ -116,9 +107,7 @@ export class BoilerplateCard extends LitElement {
   }
 
   private _showWarning(warning: string): TemplateResult {
-    return html`
-      <hui-warning>${warning}</hui-warning>
-    `;
+    return html` <hui-warning>${warning}</hui-warning> `;
   }
 
   private _showError(error: string): TemplateResult {
@@ -129,13 +118,11 @@ export class BoilerplateCard extends LitElement {
       origConfig: this.config,
     });
 
-    return html`
-      ${errorCard}
-    `;
+    return html` ${errorCard} `;
   }
 
-  // https://lit-element.polymer-project.org/guide/styles
-  static get styles(): CSSResult {
+  // https://lit.dev/docs/components/styles/
+  static get styles(): CSSResultGroup {
     return css``;
   }
 }
